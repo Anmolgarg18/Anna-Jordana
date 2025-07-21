@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Screener Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        orange: {
+                            light: '#f97316',
+                            DEFAULT: '#ea580c',
+                            dark: '#c2410c',
+                        },
+                        blue: {
+                            light: '#1e40af',
+                            DEFAULT: '#1e3a8a',
+                            dark: '#0f2167',
+                        },
+                        rating: {
+                            low: '#ef4444',
+                            medium: '#f97316',
+                            high: '#10b981'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+        }
+        
+        .tab-active {
+            color: #ea580c;
+            border-bottom: 3px solid #ea580c;
+            font-weight: 500;
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .accordion-content.active {
+            max-height: 2000px;
+        }
+        
+        .progress-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        
+        .progress-circle svg {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-circle circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+        
+        .progress-circle .bg {
+            stroke: #e5e7eb;
+        }
+        
+        .progress-circle .progress {
+            stroke: #ea580c;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 125.65;
+            transition: stroke-dashoffset 1s ease;
+        }
+        
+        .rating-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .rating-high {
+            background-color: #10b981;
+        }
+        
+        .rating-medium {
+            background-color: #f97316;
+        }
+        
+        .rating-low {
+            background-color: #ef4444;
+        }
+        
+        .importance-high {
+            background-color: #ef4444;
+        }
+        
+        .importance-medium {
+            background-color: #2563eb;
+        }
+        
+        .importance-low {
+            background-color: #60a5fa;
+        }
+        
+        .question-item {
+            border-left: 3px solid #ea580c;
+        }
+        
+        .rating-bar {
+            position: relative;
+            height: 8px;
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+        }
+        
+        .rating-fill {
+            height: 100%;
+            border-radius: 9999px;
+        }
+        
+        .rating-indicator {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Main Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+            <!-- Header -->
+            <div class="bg-white p-6 flex justify-between">
+              <img src='logo2.png' class="w-auto h-[50px]" alt="">
+              <p class="">Anna Jordana</p>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="flex border-b bg-white">
+                <button id="tab-report" class="tab-active py-4 px-8 focus:outline-none transition-colors">
+                    Hiring Manager Report
+                </button>
+                <button id="tab-onboarding" class="py-4 px-8 text-gray-600 focus:outline-none transition-colors">
+                    Onboarding Plan
+                </button>
+            </div>
+            
+            <!-- Report Content -->
+            <div id="content-report" class="p-6">
+                <!-- Candidate Overview Panel -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+                    <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                        <!-- Candidate Info -->
+                        <div class="flex flex-col items-center lg:items-start">
+                            <div class="flex items-center mb-4">
+                                <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mr-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-semibold text-gray-800">Anna Jordana</h2>
+                                    <p class="text-gray-500">Applied for: Brand Manager</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Role Fit -->
+                        <div class="flex items-center">
+                            <div class="progress-circle mr-5">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <circle class="bg" cx="60" cy="60" r="45"></circle>
+                                    <circle class="progress" cx="60" cy="60" r="45"></circle>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-3xl font-bold text-orange">65%</span>
+                                    <span class="text-sm text-gray-500">Role Fit</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">Overall Match</p>
+                                <p class="text-sm text-gray-600 max-w-xs">Slightly Above Average candidate with key skills aligned to role requirements</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Competencies Section -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-5">Competency Overview</h3>
+                    
+                    <!-- Competency Header -->
+                    <div class="bg-blue-900/10 rounded-t-lg p-4 grid grid-cols-12 gap-4 font-medium text-gray-700">
+                        <div class="col-span-3">Competency</div>
+                        <div class="col-span-5 text-center">Rating</div>
+                        <div class="col-span-3 text-center">Importance</div>
+                    </div>
+                    
+                    <!-- Competency Accordions -->
+                    <div class="space-y-4 mt-4">
+                        <!-- Customer Insights -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Customer Insights</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class= "rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 85%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 85%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                          <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna regularly uses customer feedback, surveys, and behavioral data to spot pain points and quickly improve campaigns—for example, she launched targeted emails before holidays, boosting purchases. She is attentive to shifts in customer engagement, acting fast to address drops and continually adjusts messaging based on real-time data. Her approach is agile and highly responsive, mostly focused on driving immediate results. However, she did not provide strong examples of conducting long-term market research or tracking the broader competitive landscape, which are also important for robust customer insight. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">•	Holistic listening: combines attitudinal (feedback, surveys) and behavioral data.<br/>•	Turns insights into action quickly (lead‑gen +40 % campaign; cart‑save tactic).</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">•	No mention of formal insight validation (e.g., statistical significance, VOC panels).<br/>•	Heavy marketing focus; limited evidence she feeds insights back into product/UX roadmaps.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How did you quantify the financial value of solving each pain point?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Data-driven decision making, adaptability, customer-centric thinking</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. Describe a time an insight proved wrong—how did you catch it?
+•  </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Resourcefulness, alternative data sources, creative problem-solving</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. What mechanisms do you use to keep insights fresh quarter to quarter?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Strategic thinking, practical application, results orientation</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">4.	How do you cascade insights to engineering or product teams for systemic fixes?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Metrics knowledge, analytical thinking, continuous improvement mindset</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Customer Behavioral Segmentation -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Customer Behavioral Segmentation</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 80%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 80%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna segments customers using data on purchases and behavior, allowing her to send personalized messages and offers that resulted in a 40% jump in qualified leads in one quarter. She predicts and responds to customer drop-off risks with targeted actions and frequently measures her results. Her segmentation is primarily used for quick, tactical gains, and she provided less evidence of updating these segments as the market changes. There was also little mention of how she handles data privacy or establishes a formal process to review and refresh her segmentation over time. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">•	Comfortable with algorithmic clustering and personalization at scale.<br/>•	Monitors micro segments, not just headline KPIs.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">•	No clarity on privacy compliance or model drift checks. <br/>•	Segmentation success metrics expressed qualitatively (“boosted”) rather than in precise numbers. </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. What precision/recall thresholds do you set before a model goes live? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Personalization strategies, segment-specific messaging, behavioral triggers</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. How do you retrain or retire segments as behaviors evolve?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Pattern recognition, analytical thinking, business impact</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. Walk me through your consent management process for data you ingest.</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Efficiency thinking, automation knowledge, prioritization skills</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bias Towards Commercial Impacts -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Bias Towards Commercial Impacts</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-medium" style="width: 70%"></div>
+                                            <div class="rating-indicator border-rating-medium" style="left: 70%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                       <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna makes decisions with a clear focus on measurable business impact, shifting marketing budgets and running experiments that improve ROI and lead generation. She is proactive and not afraid to make big changes, such as reallocating half of the spend to digital channels, which produced positive results. She often tests new ideas and scales what works, but did not provide much insight into how she balances immediate wins with long-term brand growth or profitability. There was also limited discussion of managing risks or developing plans for when commercial strategies don’t go as expected. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">•	Makes bold allocation calls when data indicates upside. <br/>•	Links every initiative (leads +40 %, cart save uplift) to revenue impact. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">• Limited discussion of downside scenarios (e.g., brand equity erosion, longer pay back). <br/>• Success framed in topline terms; margin impact unspoken.
+</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. Give an example where a high ROI idea was rejected—what did you learn? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: ROI analysis, business case development, strategic prioritization</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. How do you weigh quick wins against brand health? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Strategic thinking, balanced approach, measurement methodology</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">Describe your pre mortem process before big budget shifts. </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Attribution modeling knowledge, patience with results, leading indicators</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Personal Effectiveness -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Personal Effectiveness</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 90%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 90%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna has shown she can manage change effectively, such as when she led her team’s transition to remote work by introducing new tools and processes while maintaining team productivity. She fosters open communication across teams and adapts her strategies based on data and feedback. Anna is also committed to supporting her teammates’ development. However, she did not offer much detail on her delegation approach or how she manages workload to avoid bottlenecks, which are important for sustaining effectiveness as responsibilities grow. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">• Adaptive under sudden change; rapid workflow redesign. <br/>• Facilitates psychological safety and accountability across functions.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">• Delegation depth unclear; she often positions herself as the hub. <br/>• Time management system not detailed—risk of personal bottlenecks as scope grows. </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How do you decide what to delegate versus own? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Prioritization framework, stress management, decision-making process</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. What feedback have colleagues given on your conflict resolution style? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Persuasion skills, relationship building, strategic communication</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. Describe a remote work process you killed because it wasn’t working. </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Growth mindset, self-directed learning, industry engagement</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product and Portfolio Strategy -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Product and Portfolio Strategy</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-medium" style="width: 60%"></div>
+                                            <div class="rating-indicator border-rating-medium" style="left: 60%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">For new product launches, Anna ensures different teams work together by bringing in marketing, sales, product, and support perspectives, which leads to well-coordinated and successful launches. She supports trying new digital solutions when traditional methods slow down. However, she gave limited information on how she plans for competitors, manages product portfolios long-term, or decides which products to focus on or discontinue, all of which are important aspects of a comprehensive portfolio strategy.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Builds product narratives grounded in real objections and support pain points. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">Thin evidence of portfolio level decisions (SKU add/retire, resource shifts).</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How do you prioritize investment across multiple products?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Lifecycle understanding, strategic adaptation, audience consideration</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. Tell me about a time you killed a feature or SKU—what metrics drove the call?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Segmentation approach, messaging hierarchy, cross-product synergies</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. How do you forecast cannibalization risk? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Launch planning, cross-functional collaboration, measurement approach</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Brand Strategy -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Brand Strategy</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 75%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 75%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna keeps brand messaging consistent by developing clear guidelines and checking in regularly with teams to ensure everyone follows the same vision. She is quick to spot and correct any issues, helping to maintain strong branding across different projects and materials. Most of her examples focused on aligning internal teams, but she did not share much about tracking brand success with customers, adapting the brand for different markets, or maintaining governance after the initial rollout. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Proactive guardianship of brand voice across departments.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">No quantified brand health dashboard (awareness, preference, equity). </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. Which metrics tell you a brand refresh is overdue?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Brand alignment process, positioning understanding, consistency mechanisms</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. How do you ensure affiliates adapt brand assets without dilution?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Change management, brand essence understanding, evolution approach</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. Describe a time brand consistency clashed with local market needs.</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Brand metrics knowledge, long-term thinking, attribution understanding</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Business Strategy -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Business Strategy</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-medium" style="width: 65%"></div>
+                                            <div class="rating-indicator border-rating-medium" style="left: 65%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna has influenced company strategy by moving more marketing budget to digital channels, using data to support her proposals and achieving strong results quickly. She is data-driven and sees the need to keep building her skills in analytics and AI. She also recognizes the importance of helping teams adapt to change. However, she didn’t provide clear examples of planning for risks, competition, or regulatory changes, and there was little detail on how she measures the ongoing success of business strategies. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Sees marketing as lever for step change in business model.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">Limited view into longer horizon strategy frameworks (e.g., Porter, Scenario).</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How do you translate annual marketing wins into 3 year CAGR plans?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Strategic alignment process, business goal understanding, measurement approach</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. Which external forces could invalidate your digital first thesis?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Adaptability, market awareness, strategic thinking</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. Describe how you would size a new market entry beyond core ophthalmology.</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Competitive intelligence methods, differentiation thinking, strategic application</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Customer Identification and Targeting -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Customer Identification and Targeting</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 85%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 85%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna uses AI and customer data to identify and reach the right prospects, which led to higher engagement rates. She checks feedback from sales and support to make sure her targeting is relevant and is alert to early warning signs that a segment might be losing interest. While her targeting is data-driven and effective, she didn’t discuss collaborating closely with field sales teams for feedback or how she continuously monitors and improves targeting lists over time, which would further strengthen this competency.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Strong in applying analytics to improve targeting accuracy and efficiency. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">Needs to show how she manages targeting complexity as the business scales.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How do you validate your targeting approach with both quantitative and qualitative data? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Research methodology, data integration, actionable outputs</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. What processes do you have in place to identify and target emerging customer segments?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Market analysis, opportunity identification, validation methods</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. Tell me about a time when your targeting was off—what did you do to fix it? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Targeting implementation, content customization, results measurement</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Channel Strategy -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Channel Strategy</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 80%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 80%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna has improved audience reach and targeting by moving half of the marketing budget to digital channels and using real-time dashboards to adjust her approach. She experiments with timing, such as sending reminder emails before holidays to boost results. Although she is strong in digital tactics, there is less detail about how she coordinates different channels for a seamless customer journey or plans for issues with new technology or compliance requirements. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Bold, data-driven reallocation of marketing spend.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">Needs to demonstrate how she manages integration and orchestration across multiple channels.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How do you balance investment across established and emerging channels? </p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Audience analysis, channel evaluation criteria, optimization approach</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. What steps do you take to ensure consistency across channels?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Channel-specific optimization, core message preservation, format adaptation</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. Can you share an example of a channel test that failed, and what you learned?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Evaluation framework, testing methodology, scaling approach</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Campaign Development and Execution -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Campaign Development and Execution</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 90%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 90%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna led a digital campaign that combined customer insights and constant optimization to achieve a 40% increase in qualified leads in just one quarter. She manages teams through regular reviews and uses dashboards to track and improve campaign performance. While she is skilled in running campaigns and keeping teams aligned, she did not mention handling medical or legal reviews or adapting campaigns for different regions, both of which are key parts of well-rounded campaign execution in many organizations. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Campaign planning expertise, project management skills, cross-functional collaboration experience.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">Could further develop experience with larger-scale global campaign management.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. Walk us through your process for developing an integrated marketing campaign.</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Strategic planning, cross-channel integration, measurement framework</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. How do you manage stakeholders and align teams during campaign execution?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Collaboration skills, communication approach, conflict resolution</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. Describe a campaign that didn't meet expectations and how you addressed it.</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Problem-solving, adaptability, learning orientation</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Price Setting, Execution, Monitoring, and Evolution -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Price Setting and Monitoring</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-low" style="width: 40%"></div>
+                                            <div class="rating-indicator border-rating-low" style="left: 40%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                        <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna uses data to make real-time pricing decisions, like offering special deals to reduce cart abandonment and closely monitoring the results. Her approach helps improve sales quickly. However, she did not provide examples of creating longer-term pricing strategies, managing tiered or negotiated pricing, or tracking price competitiveness, which are important in broader pricing roles. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Basic understanding of value-based messaging, experience communicating pricing through content.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">Needs significant development in pricing strategy, competitive pricing analysis, and price optimization techniques.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How do you communicate value propositions that support premium pricing?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Value articulation, differentiation messaging, benefit communication</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. What experience do you have collaborating with pricing teams?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Cross-functional collaboration, pricing knowledge, support capabilities</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. How would you approach learning more about pricing strategy in our industry?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Learning approach, initiative, industry interest</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product and Portfolio Execution -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Product and Portfolio Execution</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="rating-bar">
+                                            <div class="rating-fill bg-rating-medium" style="width: 65%"></div>
+                                            <div class="rating-indicator border-rating-medium" style="left: 65%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                       <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 bg-gray-50 border-t border-gray-100">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <!-- Observations Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Candidate Assessment</h5>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Observations</p>
+                                                    <p class="text-sm text-gray-600">Anna managed a product launch by bringing different teams together and making sure everyone’s roles and expectations were clear, leading to fast adoption and positive feedback. She is proactive and adapts quickly when things change. However, she didn’t provide much detail on how she continues to improve products after launch or applies lessons learned to future launches, which would be valuable for long-term product success. </p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Strengths</p>
+                                                    <p class="text-sm text-gray-600">Product messaging development, feature communication, launch content planning.</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                    <p class="text-sm font-medium text-gray-700 mb-2">Areas for Development</p>
+                                                    <p class="text-sm text-gray-600">Could strengthen experience with complex product portfolio management and cross-product messaging.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Interview Questions Column -->
+                                        <div>
+                                            <h5 class="font-medium text-gray-700 mb-3">Recommended Interview Questions</h5>
+                                            <div class="space-y-3">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">1. How do you approach content development for a product launch?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Launch planning, audience consideration, channel strategy</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">2. Describe how you would manage content for a diverse product portfolio.</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Organization approach, consistency management, prioritization framework</p>
+                                                </div>
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange">
+                                                    <p class="text-sm font-medium text-gray-700">3. How do you collaborate with product teams to ensure accurate and compelling content?</p>
+                                                    <p class="text-xs text-gray-500 mt-1">Look for: Cross-functional collaboration, technical translation skills, review process</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-5">Cultural Attribute</h3>
+                     <div class="space-y-4 mt-4">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Collaboration</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class= "rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 85%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 85%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                          <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Teamwork</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class= "rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 85%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 85%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                          <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Resilience</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class= "rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 85%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 85%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                          <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Innovation</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class= "rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 85%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 85%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                          <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="accordion-header cursor-pointer hover:bg-gray-50">
+                                <div class="grid grid-cols-12 gap-4 items-center p-5">
+                                    <div class="col-span-3">
+                                        <h4 class="font-medium text-gray-800">Adaptability</h4>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class= "rating-bar">
+                                            <div class="rating-fill bg-rating-high" style="width: 85%"></div>
+                                            <div class="rating-indicator border-rating-high" style="left: 85%"></div>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-xs text-gray-500">Low</span>
+                                            <span class="text-xs text-gray-500">Average</span>
+                                            <span class="text-xs text-gray-500">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 text-center">
+                                          <span class="rating-badge importance-high">High</span>
+                                    </div>
+                                    <div class="col-span-1 flex justify-end">
+                                        <svg class="accordion-icon w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <!-- Overall Assessment -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Overall Assessment</h3>
+                    <p class="mb-4 text-gray-700">Alex demonstrates exceptional strengths in customer insights, behavioral segmentation, and campaign development, which align perfectly with our primary needs. Their personal effectiveness and customer targeting skills are also outstanding. While they have areas for development in pricing strategy and product portfolio management, these are less critical for the role and can be addressed through training.</p>
+                    <div class="flex items-center">
+                        <span class="font-medium text-gray-700 mr-3">Recommendation:</span>
+                        <span class="px-4 py-1 bg-red-100 text-red-800 font-medium rounded-full text-sm">Do Not Proceed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onboarding Content -->
+            <div id="content-onboarding" class="p-6 hidden">
+                <!-- Candidate Info Panel -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mr-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800">Anna Jordana</h2>
+                            <p class="text-gray-500">Brand Manager</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Start Date</p>
+                            <p class="font-medium text-gray-800">July 1, 2023</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Department</p>
+                            <p class="font-medium text-gray-800">Marketing</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Manager</p>
+                            <p class="font-medium text-gray-800">Sarah Williams</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 90-Day Plan -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-5">90-Day Onboarding Plan</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Week 1-2 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="bg-blue-900/10 p-4 border-b border-gray-100">
+                                <h4 class="font-medium text-blue-dark">Week 1-2: Orientation & Introduction</h4>
+                            </div>
+                            <div class="p-5">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Complete company onboarding process with HR</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Meet with direct manager and team members</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Review company brand guidelines and marketing materials</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Set up accounts for all necessary tools and platforms</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Shadow team members on current projects</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Week 3-4 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="bg-blue-900/10 p-4 border-b border-gray-100">
+                                <h4 class="font-medium text-blue-dark">Week 3-4: Skills Development</h4>
+                            </div>
+                            <div class="p-5">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Complete pricing strategy fundamentals training</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Training session on company's product portfolio</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Review customer segmentation models and data</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Begin working on small content projects with supervision</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Month 2 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="bg-blue-900/10 p-4 border-b border-gray-100">
+                                <h4 class="font-medium text-blue-dark">Month 2: Increasing Responsibility</h4>
+                            </div>
+                            <div class="p-5">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Take ownership of channel-specific content strategy</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Develop first customer segment-specific content plan</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Weekly mentoring sessions with product marketing team</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Participate in campaign planning meetings</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Mid-point review with manager</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Month 3 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="bg-blue-900/10 p-4 border-b border-gray-100">
+                                <h4 class="font-medium text-blue-dark">Month 3: Full Integration</h4>
+                            </div>
+                            <div class="p-5">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Lead content development for upcoming campaign</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Create comprehensive customer journey content map</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Develop content strategy for one product line</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Present customer insights-driven content recommendations</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-5 w-5 text-orange mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">90-day performance review and goal setting for next quarter</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Development Focus Areas -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-5">Development Focus Areas</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Price Setting & Monitoring</span>
+                                <span class="text-sm text-gray-500">40% Complete</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-orange h-2.5 rounded-full" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Product Portfolio Management</span>
+                                <span class="text-sm text-gray-500">65% Complete</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-orange h-2.5 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Business Strategy</span>
+                                <span class="text-sm text-gray-500">60% Complete</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-orange h-2.5 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+   
+        // Tab switching functionality
+        document.getElementById('tab-report').addEventListener('click', function() {
+            document.getElementById('tab-report').classList.add('tab-active');
+            document.getElementById('tab-onboarding').classList.remove('tab-active');
+            document.getElementById('content-report').classList.remove('hidden');
+            document.getElementById('content-onboarding').classList.add('hidden');
+        });
+        
+        document.getElementById('tab-onboarding').addEventListener('click', function() {
+            document.getElementById('tab-onboarding').classList.add('tab-active');
+            document.getElementById('tab-report').classList.remove('tab-active');
+            document.getElementById('content-onboarding').classList.remove('hidden');
+            document.getElementById('content-report').classList.add('hidden');
+        });
+        
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.accordion-icon');
+                
+                content.classList.toggle('active');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+        
+        // Open first accordion by default
+        document.querySelector('.accordion-content').classList.add('active');
+        document.querySelector('.accordion-icon').classList.add('rotate-180');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9610e5f1d2f217d7',t:'MTc1MjgzMDM3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
